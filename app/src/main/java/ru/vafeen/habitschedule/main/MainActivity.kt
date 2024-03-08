@@ -1,4 +1,4 @@
-package ru.vafeen.habitschedule
+package ru.vafeen.habitschedule.main
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
