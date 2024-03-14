@@ -1,4 +1,4 @@
-package ru.vafeen.habitschedule.ui.navigation
+package ru.vafeen.habitschedule.ui.common.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
