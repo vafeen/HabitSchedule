@@ -50,8 +50,13 @@ android {
     }
 }
 val room_version = "2.6.1"
+val nav_version = "2.7.7"
 dependencies {
 
+    //navigation
+    implementation("androidx.navigation:navigation-compose:$nav_version")
+
+    //room database
     implementation("androidx.room:room-runtime:$room_version")
     annotationProcessor("androidx.room:room-compiler:$room_version")
     kapt("androidx.room:room-compiler:$room_version")
@@ -59,6 +64,7 @@ dependencies {
     implementation("androidx.room:room-ktx:$room_version")
 
 
+    // compose
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
     implementation("androidx.activity:activity-compose:1.8.2")
