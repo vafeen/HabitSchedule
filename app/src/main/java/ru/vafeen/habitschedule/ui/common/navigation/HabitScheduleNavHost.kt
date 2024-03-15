@@ -5,6 +5,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import ru.vafeen.habitschedule.ui.screens.Screens
+import ru.vafeen.habitschedule.ui.screens.data.Data
 import ru.vafeen.habitschedule.ui.screens.main.Main
 
 @Composable
@@ -13,7 +14,10 @@ fun HabitScheduleNavHost() {
 
     NavHost(navController = navHostController, startDestination = Screens.Main.route) {
         composable(Screens.Main.route) {
-            Main()
+            Main(navHostController = navHostController)
+        }
+        composable(Screens.Data.route){
+            Data(navHostController = navHostController)
         }
     }
 
