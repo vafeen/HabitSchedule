@@ -14,20 +14,21 @@ import ru.vafeen.habitschedule.ui.screens.Screens
 
 @Composable
 fun BottomBar(
-    navHostController: NavHostController,
     selected1: Boolean = false,
     selected2: Boolean = false,
+    onClickToScreen1: () -> Unit = {},
+    onClickToScreen2: () -> Unit = {},
 ) {
     BottomAppBar(modifier = Modifier.fillMaxSize()) {
 
         NavigationBarItem(
             selected = selected1,
-            onClick = { navHostController.navigate(Screens.Main.route) },
+            onClick =  onClickToScreen1,
             icon = { Icon(imageVector = Icons.Default.Home, contentDescription = "home screen") })
 
         NavigationBarItem(
             selected = selected2,
-            onClick = { navHostController.navigate(Screens.Data.route) },
+            onClick = onClickToScreen2,
             icon = { Icon(imageVector = Icons.Default.List, contentDescription = "data screen") })
     }
 }
