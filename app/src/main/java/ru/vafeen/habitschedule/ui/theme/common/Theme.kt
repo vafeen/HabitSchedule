@@ -13,16 +13,17 @@ import androidx.core.view.WindowCompat
 
 data class HabitScheduleColors(
     val background: Color,
-
+    val habitCardColor: Color,
 )
 
 val baseLightPalette = HabitScheduleColors(
     background = Color.White,
-
+    habitCardColor = Color.LightGray
 )
 
 val baseDarkPalette = baseLightPalette.copy(
     background = Color.Black,
+    habitCardColor = Color.Gray
 )
 
 @Composable
