@@ -2,6 +2,7 @@ package ru.vafeen.habitschedule.ui.theme.common
 
 import android.app.Activity
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
@@ -14,11 +15,13 @@ import androidx.core.view.WindowCompat
 data class HabitScheduleColors(
     val background: Color,
     val habitCardColor: Color,
+    val barsColor: Color,
 )
 
 val baseLightPalette = HabitScheduleColors(
     background = Color.White,
-    habitCardColor = Color.LightGray
+    habitCardColor = Color.LightGray,
+    barsColor = Color(0xFF7B1FA2)
 )
 
 val baseDarkPalette = baseLightPalette.copy(
@@ -45,11 +48,12 @@ fun HabitScheduleTheme(
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
         }
     }
-
-    CompositionLocalProvider(
-        LocalColors provides colors,
-        content = content
-    )
+    MaterialTheme {
+        CompositionLocalProvider(
+            LocalColors provides colors,
+            content = content
+        )
+    }
 }
 
 object HabitScheduleTheme {
