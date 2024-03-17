@@ -1,16 +1,52 @@
 package ru.vafeen.habitschedule.ui.screens.data
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FabPosition
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import kotlinx.coroutines.launch
 import ru.vafeen.habitschedule.main.application.HabitApp
+import ru.vafeen.habitschedule.noui.HabitItem
 import ru.vafeen.habitschedule.noui.db.HabitScheduleRepository
 import ru.vafeen.habitschedule.ui.common.components.bottom_bar.BottomBar
+import ru.vafeen.habitschedule.ui.common.components.card_of_habit.CardOfHabit
+import ru.vafeen.habitschedule.ui.common.components.dialogs.AddingHabitDialog
+import ru.vafeen.habitschedule.ui.screens.Screens
+import ru.vafeen.habitschedule.ui.theme.common.HabitScheduleTheme
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Data(
     navHostController: NavHostController,
@@ -20,24 +56,109 @@ fun Data(
     val dtDao = HabitApp.hSDB?.habitDateTimeDao()
     if (itemDao != null && dtDao != null) {
         db = HabitScheduleRepository(
-            itemDao = itemDao,
-            dtDao = dtDao
+            itemDao = itemDao, dtDao = dtDao
         )
     }
 
     if (db != null) {
-        Scaffold(
-            modifier = Modifier.fillMaxSize(),
-            bottomBar = {  },
+        val cor = rememberCoroutineScope()
+        var itemsList by remember {
+            mutableStateOf(listOf<HabitItem>())
+        }
+        var textSearch by remember {
+            mutableStateOf("")
+        }
+        var isAddingHabitDialogOpen by remember {
+            mutableStateOf(true)
+        }
+        LaunchedEffect(key1 = null) {
+            cor.launch {
+                itemsList = db.getAll()
+            }
+        }
+
+
+        Scaffold(modifier = Modifier.fillMaxSize(), topBar = {
+            TopAppBar(
+                title = {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(text = "Все напоминания", color = Color.Black)
+                    }
+                }, colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = HabitScheduleTheme.colors.barsColor
+                )
+            )
+
+        }, bottomBar = {
+            BottomBar(selected2 = true,
+                onClickToScreen1 = {
+                    navHostController.popBackStack()
+                    navHostController.popBackStack()
+                    navHostController.navigate(Screens.Main.route)
+                })
+        }, floatingActionButton = {
+            FloatingActionButton(
+                onClick = { isAddingHabitDialogOpen = true },
+                containerColor = HabitScheduleTheme.colors.barsColor
+            ) {
+                Icon(imageVector = Icons.Default.Add, contentDescription = "Add habit")
+            }
+        }, floatingActionButtonPosition = FabPosition.End
         ) { innerPadding ->
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(innerPadding)
+                    .background(HabitScheduleTheme.colors.background)
             ) {
-
+                OutlinedTextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(3.dp)
+                        .height(50.dp),
+                    textStyle = TextStyle(color = Color.Black),
+                    value = textSearch,
+                    onValueChange = {
+                        textSearch = it
+                    },
+                    leadingIcon = {
+                        Icon(imageVector = Icons.Default.Search, contentDescription = "search")
+                    },
+                    placeholder = { Text(text = "Искать в заметках") },
+                    colors = TextFieldDefaults.colors(
+                        focusedTextColor = Color.Black
+                    )
+                )
+                if (isAddingHabitDialogOpen) {
+                    AddingHabitDialog(
+                        onDismissRequest = { isAddingHabitDialogOpen = false },
+                        onAddNewItem = { item ->
+                            cor.launch {
+                                db.insert(item)
+                            }
+                        }
+                    )
+                }
+                LazyColumn(
+                    modifier = Modifier.weight(1f)
+                ) {
+                    items(itemsList.let {
+                        if (textSearch.isEmpty()) {
+                            it
+                        } else {
+                            it.filter { hitem ->
+                                hitem.title.contains(textSearch) || hitem.text.contains(textSearch)
+                            }
+                        }
+                    }) { item ->
+                        item.CardOfHabit()
+                    }
+                }
             }
-
         }
     }
 }
