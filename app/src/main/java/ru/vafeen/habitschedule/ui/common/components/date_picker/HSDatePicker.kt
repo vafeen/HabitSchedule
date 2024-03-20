@@ -32,16 +32,17 @@ import ru.vafeen.habitschedule.ui.theme.common.HabitScheduleTheme
 import ru.vafeen.habitschedule.ui.theme.common.TextSize
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.LocalTime
 import java.time.ZoneId
 
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun HSDatePicker(
-    state: MutableState<LocalDate> = mutableStateOf(LocalDate.now()),
+    state: MutableState<LocalDateTime>,
 ) {
     val cor = rememberCoroutineScope()
     val lazyListState = rememberLazyListState()
-    val today = LocalDate.now()
+    val today = LocalDateTime.now()
     cor.launch {
         lazyListState.scrollToItem(index = today.dayOfYear - state.value.dayOfYear)
     }
@@ -56,7 +57,6 @@ fun HSDatePicker(
             val date = today.plusDays(index.toLong())
             Row(modifier = Modifier.clickable {
                 state.value = date
-
             }) {
                 if (state.value == date) {
 
