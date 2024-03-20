@@ -49,15 +49,13 @@ fun HSTimePicker(
             state = lazyRowStateHours
         ) {
             items(count = 24) { index ->
-                Button(
-                    modifier = Modifier.padding(horizontal = 2.dp),
+                TimePickerItemButton(
                     onClick = {
                         state.value = state.value.plusHours((index - state.value.hour).toLong())
                     },
-                    enabled = state.value.hour != index
-                ) {
-                    Text(text = "$index")
-                }
+                    enabled = state.value.hour != index,
+                    text = "$index"
+                )
             }
         }
 
@@ -69,16 +67,14 @@ fun HSTimePicker(
             state = lazyRowStateMinutes
         ) {
             items(count = 60) { index ->
-                Button(
-                    modifier = Modifier.padding(horizontal = 2.dp),
+                TimePickerItemButton(
                     onClick = {
                         state.value =
                             state.value.plusMinutes((index - state.value.minute).toLong())
                     },
-                    enabled = state.value.minute != index
-                ) {
-                    Text(text = "$index")
-                }
+                    enabled = state.value.minute != index,
+                    text = "$index",
+                )
             }
         }
 
