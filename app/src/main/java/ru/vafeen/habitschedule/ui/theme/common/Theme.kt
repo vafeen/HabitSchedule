@@ -16,20 +16,24 @@ data class HabitScheduleColors(
     val background: Color,
     val habitCardColor: Color,
     val barsColor: Color,
-    val textColor: Color,
-)
+    val blackInLightAndLightGrayInDark: Color,
+    val whiteInDarkAndBlackInLight:Color,
+
+    )
 
 val baseLightPalette = HabitScheduleColors(
     background = Color.White,
     habitCardColor = Color.LightGray,
     barsColor = Color(0xFF7B1FA2),
-    textColor = Color.Black
+    blackInLightAndLightGrayInDark = Color.Black,
+    whiteInDarkAndBlackInLight = Color.Black
 )
 
 val baseDarkPalette = baseLightPalette.copy(
     background = Color.Black,
     habitCardColor = Color.Gray,
-    textColor = Color.White
+    blackInLightAndLightGrayInDark = Color.LightGray,
+    whiteInDarkAndBlackInLight = Color.White
 )
 
 @Composable
