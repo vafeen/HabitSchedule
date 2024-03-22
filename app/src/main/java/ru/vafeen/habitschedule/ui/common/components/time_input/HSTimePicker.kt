@@ -23,13 +23,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
+import java.time.LocalTime
 
 
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun HSTimePicker(
-    state: MutableState<LocalDateTime>,
+    state: MutableState<LocalTime>,
 ) {
     val lazyRowStateHours = rememberLazyListState()
 
@@ -37,10 +37,11 @@ fun HSTimePicker(
 
     val cor = rememberCoroutineScope()
 
-    cor.launch {
+    cor.launch(Dispatchers.Main) {
         lazyRowStateHours.scrollToItem(state.value.hour)
         lazyRowStateMinutes.scrollToItem(state.value.minute)
     }
+
     Column(modifier = Modifier.fillMaxWidth()) {
 
         //hours
