@@ -1,9 +1,11 @@
 package ru.vafeen.habitschedule.ui.common.components.date_picker
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -22,14 +24,15 @@ import ru.vafeen.habitschedule.noui.dateAndTime.getRuDaysOfWeek
 import ru.vafeen.habitschedule.noui.dateAndTime.getRuMonths
 import ru.vafeen.habitschedule.ui.theme.common.HabitScheduleTheme
 import ru.vafeen.habitschedule.ui.theme.common.TextSize
-import java.time.LocalDateTime
+import java.time.LocalDate
 
 @Composable
 fun HSDatePicker(
-    state: MutableState<LocalDateTime>,
+    state: MutableState<LocalDate>,
 ) {
     val lazyListState = rememberLazyListState()
-    val today = LocalDateTime.now()
+
+    val today = LocalDate.now()
 
     LaunchedEffect(key1 = null) {
         lazyListState.scrollToItem(index = today.dayOfYear - state.value.dayOfYear)
@@ -44,29 +47,29 @@ fun HSDatePicker(
         modifier = Modifier.height(100.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+
         items(count = 366) { index ->
             val date = today.plusDays(index.toLong())
+
             Row(modifier = Modifier.clickable {
                 state.value = date
             }) {
-                if (state.value == date) {
-
-                    Icon(
-                        imageVector = Icons.Default.Done,
-                        contentDescription = "selected date",
-                        tint = HabitScheduleTheme.colors.textColor,
-                        modifier = Modifier.size(20.dp)
-                    )
-
-                    Spacer(modifier = Modifier.width(3.dp))
-                }
                 Text(
                     text = "${ruDaysOfWeek[date.dayOfWeek.ordinal]}, ${date.dayOfMonth} ${ruMonths[date.monthValue - 1]} ${date.year}",
-                    color = HabitScheduleTheme.colors.textColor,
-                    fontSize = TextSize.medium
+                    color = HabitScheduleTheme.colors.blackInLightAndLightGrayInDark,
+                    fontSize = TextSize.big,
+                    modifier = Modifier.let {
+                        if (state.value == date) {
+                            it
+                                .background(HabitScheduleTheme.colors.barsColor)
+                                .padding(2.dp)
+                        } else {
+                            it
+                        }
+                    }
                 )
-
             }
+
             Spacer(modifier = Modifier.height(3.dp))
         }
     }
