@@ -4,7 +4,7 @@ enum class LogType(val value: String) {
     Database("Database");
 
     companion object {
-        const val defaultName = "hs"
+        const val defaultName = "App"
     }
 
 }
