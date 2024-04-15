@@ -32,7 +32,7 @@ val baseLightPalette = HabitScheduleColors(
 val baseDarkPalette = baseLightPalette.copy(
     background = Color.Black,
     habitCardColor = Color.Gray,
-    blackInLightAndLightGrayInDark = Color.LightGray,
+    blackInLightAndLightGrayInDark = Color.LightGray, // для слепых поменять на  White
     whiteInDarkAndBlackInLight = Color.White
 )
 
@@ -55,6 +55,7 @@ fun HabitScheduleTheme(
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
         }
     }
+
     MaterialTheme {
         CompositionLocalProvider(
             LocalColors provides colors,
