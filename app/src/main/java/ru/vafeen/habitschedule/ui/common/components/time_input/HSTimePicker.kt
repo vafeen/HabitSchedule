@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import java.time.LocalTime
 
 
@@ -30,6 +31,7 @@ import java.time.LocalTime
 @Composable
 fun HSTimePicker(
     state: MutableState<LocalTime>,
+    onUpdate: (LocalTime) -> Unit
 ) {
     val lazyRowStateHours = rememberLazyListState()
 
@@ -53,6 +55,8 @@ fun HSTimePicker(
                 TimePickerItemButton(
                     onClick = {
                         state.value = state.value.plusHours((index - state.value.hour).toLong())
+
+                        onUpdate(state.value)
                     },
                     enabled = state.value.hour != index,
                     text = "$index"
@@ -72,6 +76,8 @@ fun HSTimePicker(
                     onClick = {
                         state.value =
                             state.value.plusMinutes((index - state.value.minute).toLong())
+
+                        onUpdate(state.value)
                     },
                     enabled = state.value.minute != index,
                     text = "$index",
