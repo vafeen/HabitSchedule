@@ -30,7 +30,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import ru.vafeen.habitschedule.noui.HabitItem
-import ru.vafeen.habitschedule.noui.dateAndTime.getRuMonths
 import ru.vafeen.habitschedule.ui.common.components.date_picker.HSDatePicker
 import ru.vafeen.habitschedule.ui.common.components.time_input.HSTimePicker
 import ru.vafeen.habitschedule.ui.theme.common.HabitScheduleTheme
@@ -41,8 +40,9 @@ import java.time.LocalTime
 @Composable
 fun AddEditHabitDialog(
     item: MutableState<HabitItem>,
-    onDismissRequest: () -> Unit, mainButtonAction: (item: HabitItem) -> Unit,
-    mainButtonText: (item: HabitItem) -> String,
+    onDismissRequest: () -> Unit,
+    mainButtonAction: (item: HabitItem) -> Unit,
+    mainButtonText: @Composable (item: HabitItem) -> Unit,
 ) {
 
     val tfColors = TextFieldDefaults.colors(
@@ -106,11 +106,25 @@ fun AddEditHabitDialog(
 
             Spacer(modifier = Modifier.height(5.dp))
 
-            HSTimePicker(state = timePickerState)
+            HSTimePicker(state = timePickerState) {
+                item.value = item.value.copy(
+                    dateTime = LocalDateTime.of(
+                        datePickerState.value,
+                        timePickerState.value
+                    )
+                )
+            }
 
             Spacer(modifier = Modifier.height(5.dp))
 
-            HSDatePicker(state = datePickerState)
+            HSDatePicker(state = datePickerState) {
+                item.value = item.value.copy(
+                    dateTime = LocalDateTime.of(
+                        datePickerState.value,
+                        timePickerState.value
+                    )
+                )
+            }
 
             Spacer(modifier = Modifier.height(5.dp))
 
@@ -144,7 +158,7 @@ fun AddEditHabitDialog(
                     contentColor = HabitScheduleTheme.colors.whiteInDarkAndBlackInLight
                 )
             ) {
-                Text(text = mainButtonText(item.value))
+                mainButtonText(item = item.value)
             }
         }
     }
