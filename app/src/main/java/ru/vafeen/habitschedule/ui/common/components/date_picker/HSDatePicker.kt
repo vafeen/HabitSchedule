@@ -6,19 +6,15 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Done
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import ru.vafeen.habitschedule.noui.dateAndTime.getRuDaysOfWeek
 import ru.vafeen.habitschedule.noui.dateAndTime.getRuMonths
@@ -29,6 +25,7 @@ import java.time.LocalDate
 @Composable
 fun HSDatePicker(
     state: MutableState<LocalDate>,
+    onUpdate: (LocalDate) -> Unit
 ) {
     val lazyListState = rememberLazyListState()
 
@@ -53,10 +50,16 @@ fun HSDatePicker(
 
             Row(modifier = Modifier.clickable {
                 state.value = date
+
+                onUpdate(state.value)
             }) {
                 Text(
                     text = "${ruDaysOfWeek[date.dayOfWeek.ordinal]}, ${date.dayOfMonth} ${ruMonths[date.monthValue - 1]} ${date.year}",
-                    color = HabitScheduleTheme.colors.blackInLightAndLightGrayInDark,
+                    color = if (state.value == date) {
+                        Color.White
+                    } else {
+                        HabitScheduleTheme.colors.blackInLightAndLightGrayInDark
+                    },
                     fontSize = TextSize.big,
                     modifier = Modifier.let {
                         if (state.value == date) {
