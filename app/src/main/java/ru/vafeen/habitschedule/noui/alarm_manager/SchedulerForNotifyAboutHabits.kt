@@ -16,7 +16,7 @@ class SchedulerForNotifyAboutHabits(
 
     fun scheduleOnce(habitItem: HabitItem) {
         val intent = Intent(context, ScheduleReceiverForNotifyAboutHabits::class.java).apply {
-            putExtra("EXTRA_ID", habitItem.id)
+            putExtra(ExtraValues.ItemID.key, habitItem.id)
         }
 
         alarmManager.setExactAndAllowWhileIdle(
@@ -34,9 +34,9 @@ class SchedulerForNotifyAboutHabits(
 
     fun scheduleWithRepeating(habitItem: HabitItem) {
         val intent = Intent(context, ScheduleReceiverForNotifyAboutHabits::class.java).apply {
-            putExtra("EXTRA_ID", habitItem.id)
+            putExtra(ExtraValues.ItemID.key, habitItem.id)
         }
-        
+
         alarmManager.setRepeating(
             AlarmManager.RTC_WAKEUP,
             habitItem.dateTime.atZone(ZoneId.systemDefault())
