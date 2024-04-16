@@ -36,10 +36,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import ru.vafeen.habitschedule.main.application.HabitApp
 import ru.vafeen.habitschedule.noui.HabitItem
 import ru.vafeen.habitschedule.noui.db.HabitScheduleRepository
+import ru.vafeen.habitschedule.noui.log.LogType
+import ru.vafeen.habitschedule.noui.log.logExecutor
 import ru.vafeen.habitschedule.ui.common.components.bottom_bar.BottomBar
 import ru.vafeen.habitschedule.ui.common.components.card_of_habit.CardOfHabit
 import ru.vafeen.habitschedule.ui.common.components.dialogs.AddingHabitDialog
@@ -62,19 +66,29 @@ fun Data(
 
     if (db != null) {
         val cor = rememberCoroutineScope()
-        var itemsList by remember {
+        var listik by remember {
             mutableStateOf(listOf<HabitItem>())
         }
+        val itemsList by remember {
+            mutableStateOf(flow {
+                emit(db.getAll())
+            })
+        }
+
+        LaunchedEffect(key1 = null) {
+            itemsList.collect {
+                listik = it
+            }
+
+            logExecutor(suffixTag = LogType.Database.value, message = "обновление в launchedEffect")
+        }
+
+
         var textSearch by remember {
             mutableStateOf("")
         }
         var isAddingHabitDialogOpen by remember {
-            mutableStateOf(true)
-        }
-        LaunchedEffect(key1 = null) {
-            cor.launch {
-                itemsList = db.getAll()
-            }
+            mutableStateOf(false)
         }
 
 
@@ -97,17 +111,21 @@ fun Data(
             BottomBar(selected2 = true,
                 onClickToScreen1 = {
                     navHostController.popBackStack()
+
                     navHostController.popBackStack()
+
                     navHostController.navigate(Screens.Main.route)
                 })
         }, floatingActionButton = {
             FloatingActionButton(
                 onClick = { isAddingHabitDialogOpen = true },
+
                 containerColor = HabitScheduleTheme.colors.barsColor
             ) {
                 Icon(imageVector = Icons.Default.Add, contentDescription = "Add habit")
             }
-        }, floatingActionButtonPosition = FabPosition.End
+        },
+            floatingActionButtonPosition = FabPosition.End
         ) { innerPadding ->
             Column(
                 modifier = Modifier
@@ -120,41 +138,65 @@ fun Data(
                         .fillMaxWidth()
                         .padding(3.dp)
                         .height(50.dp),
+
                     textStyle = TextStyle(color = Color.Black),
+
                     value = textSearch,
+
                     onValueChange = {
                         textSearch = it
                     },
+
                     leadingIcon = {
                         Icon(imageVector = Icons.Default.Search, contentDescription = "search")
                     },
+
                     placeholder = { Text(text = "Искать в заметках") },
+
                     colors = TextFieldDefaults.colors(
                         focusedTextColor = Color.Black
                     )
                 )
+
                 if (isAddingHabitDialogOpen) {
                     AddingHabitDialog(
                         onDismissRequest = { isAddingHabitDialogOpen = false },
+
                         onAddNewItem = { item ->
+
                             cor.launch {
+
                                 db.insert(item)
+
+                                itemsList.collect { listik = it }
+
+                                logExecutor(
+                                    suffixTag = LogType.Database.value,
+                                    message = "обновление при вставке"
+                                )
                             }
+
                         }
                     )
                 }
+
                 LazyColumn(
                     modifier = Modifier.weight(1f)
                 ) {
-                    items(itemsList.let {
-                        if (textSearch.isEmpty()) {
-                            it
-                        } else {
-                            it.filter { hitem ->
-                                hitem.title.contains(textSearch) || hitem.text.contains(textSearch)
+                    items(
+                        listik
+                            .let {
+                                if (textSearch.isEmpty()) {
+                                    it
+                                } else {
+                                    it.filter { hitem ->
+                                        hitem.title.contains(textSearch) || hitem.text.contains(
+                                            textSearch
+                                        )
+                                    }
+                                }
                             }
-                        }
-                    }) { item ->
+                    ) { item ->
                         item.CardOfHabit()
                     }
                 }
