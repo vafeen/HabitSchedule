@@ -10,9 +10,13 @@ import ru.vafeen.habitschedule.ui.theme.common.HabitScheduleTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
+
             HabitScheduleTheme {
+
                 RequestNotificationPermission()
+
                 HabitScheduleNavHost()
             }
         }

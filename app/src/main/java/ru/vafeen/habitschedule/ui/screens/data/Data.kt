@@ -56,19 +56,25 @@ fun Data(
     navHostController: NavHostController,
 ) {
     var db: HabitScheduleRepository? = null
+
     val itemDao = HabitApp.hSDB?.habitItemDao()
+
     val dtDao = HabitApp.hSDB?.habitDateTimeDao()
+
     if (itemDao != null && dtDao != null) {
         db = HabitScheduleRepository(
             itemDao = itemDao, dtDao = dtDao
         )
+        
     }
 
     if (db != null) {
         val cor = rememberCoroutineScope()
+
         var listik by remember {
             mutableStateOf(listOf<HabitItem>())
         }
+
         val itemsList by remember {
             mutableStateOf(flow {
                 emit(db.getAll())

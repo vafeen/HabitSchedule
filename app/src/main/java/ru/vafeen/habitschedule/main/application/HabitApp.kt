@@ -17,6 +17,7 @@ class HabitApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
+
         hSDB = Room
             .databaseBuilder(this, HabitScheduleDatabase::class.java, "HabitSchedule.db")
             .build()
@@ -30,6 +31,7 @@ class HabitApp : Application() {
             NotificationManager.IMPORTANCE_HIGH
         )
         notificationManager.createNotificationChannel(notificationChannel)
+
     }
 
 }
