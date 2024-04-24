@@ -1,5 +1,6 @@
 package ru.vafeen.habitschedule.noui
 
+import android.widget.Switch
 import ru.vafeen.habitschedule.noui.dateAndTime.getMonth
 import ru.vafeen.habitschedule.noui.db.entities.HabitDateTimeEntity
 import ru.vafeen.habitschedule.noui.db.entities.HabitItemEntity
@@ -13,6 +14,7 @@ data class HabitItem(
     val text: String = "",
     val dateTime: LocalDateTime = LocalDateTime.now(),
     val frequency: Frequency = Frequency.Once,
+    val isWork: Boolean = true
 ) {
     fun createHabitItemEntity(): HabitItemEntity = HabitItemEntity(
         id = id,
