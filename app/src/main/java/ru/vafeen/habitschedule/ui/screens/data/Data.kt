@@ -159,7 +159,7 @@ fun Data(
 
                         cor.launch {
 
-                            db.insert(item)
+                            HabitApp.eventer.addEvent(habitItem = item)
 
                             itemsList.collect { listik = it }
 
