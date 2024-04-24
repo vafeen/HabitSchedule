@@ -36,12 +36,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import ru.vafeen.habitschedule.main.application.HabitApp
 import ru.vafeen.habitschedule.noui.HabitItem
-import ru.vafeen.habitschedule.noui.db.HabitScheduleRepository
+import ru.vafeen.habitschedule.noui.db.DatabaseRepository
 import ru.vafeen.habitschedule.noui.log.LogType
 import ru.vafeen.habitschedule.noui.log.logExecutor
 import ru.vafeen.habitschedule.ui.common.components.bottom_bar.BottomBar
@@ -55,14 +54,14 @@ import ru.vafeen.habitschedule.ui.theme.common.HabitScheduleTheme
 fun Data(
     navHostController: NavHostController,
 ) {
-    var db: HabitScheduleRepository? = null
+    var db: DatabaseRepository? = null
 
     val itemDao = HabitApp.hSDB?.habitItemDao()
 
     val dtDao = HabitApp.hSDB?.habitDateTimeDao()
 
     if (itemDao != null && dtDao != null) {
-        db = HabitScheduleRepository(
+        db = DatabaseRepository(
             itemDao = itemDao, dtDao = dtDao
         )
         

@@ -5,6 +5,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import androidx.room.Room
+import ru.vafeen.habitschedule.noui.db.HabitItemRepository
 import ru.vafeen.habitschedule.noui.db.HabitScheduleDatabase
 import ru.vafeen.habitschedule.noui.notifications.NOTIFICATION_CHANNEL_ID
 import ru.vafeen.habitschedule.noui.notifications.NOTIFICATION_CHANNEL_NAME
@@ -12,6 +13,9 @@ import ru.vafeen.habitschedule.noui.notifications.NOTIFICATION_CHANNEL_NAME
 class HabitApp : Application() {
     companion object {
         var hSDB: HabitScheduleDatabase? = null
+            private set
+
+        var HabitItemRepository: HabitItemRepository? = null
             private set
     }
 
@@ -21,6 +25,8 @@ class HabitApp : Application() {
         hSDB = Room
             .databaseBuilder(this, HabitScheduleDatabase::class.java, "HabitSchedule.db")
             .build()
+
+        HabitItemRepository = HabitItemRepository()
 
         val notificationManager =
             applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager

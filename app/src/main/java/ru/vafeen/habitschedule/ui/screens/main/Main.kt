@@ -6,12 +6,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
-import androidx.room.Room
 import ru.vafeen.habitschedule.main.application.HabitApp
-import ru.vafeen.habitschedule.noui.db.HabitScheduleDatabase
-import ru.vafeen.habitschedule.noui.db.HabitScheduleRepository
+import ru.vafeen.habitschedule.noui.db.DatabaseRepository
 import ru.vafeen.habitschedule.ui.common.components.bottom_bar.BottomBar
 import ru.vafeen.habitschedule.ui.screens.Screens
 
@@ -19,11 +16,11 @@ import ru.vafeen.habitschedule.ui.screens.Screens
 fun Main(
     navHostController: NavHostController,
 ) {
-    var db: HabitScheduleRepository? = null
+    var db: DatabaseRepository? = null
     val itemDao = HabitApp.hSDB?.habitItemDao()
     val dtDao = HabitApp.hSDB?.habitDateTimeDao()
     if (itemDao != null && dtDao != null) {
-        db = HabitScheduleRepository(
+        db = DatabaseRepository(
             itemDao = itemDao,
             dtDao = dtDao
         )
