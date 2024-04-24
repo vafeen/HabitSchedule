@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import ru.vafeen.habitschedule.noui.Frequency
 import ru.vafeen.habitschedule.noui.HabitItem
+import java.time.Duration
 import java.time.ZoneId
 
 
@@ -35,7 +36,7 @@ class SchedulerForNotifyAboutHabits(
             habitItem.dateTime.atZone(ZoneId.systemDefault()).toEpochSecond() * 1000L,
             PendingIntent.getBroadcast(
                 context,
-                habitItem.hashCode(),
+                habitItem.id,
                 intent,
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
@@ -48,14 +49,15 @@ class SchedulerForNotifyAboutHabits(
             putExtra(ExtraValues.ItemID.key, habitItem.id)
         }
 
+
         alarmManager.setRepeating(
             AlarmManager.RTC_WAKEUP,
             habitItem.dateTime.atZone(ZoneId.systemDefault())
                 .toEpochSecond() * 1000L,
-            60000L,
+            habitItem.frequency.timeRepeat,
             PendingIntent.getBroadcast(
                 context,
-                habitItem.hashCode(),
+                habitItem.id,
                 intent,
                 PendingIntent.FLAG_IMMUTABLE
             )
@@ -66,7 +68,7 @@ class SchedulerForNotifyAboutHabits(
         alarmManager.cancel(
             PendingIntent.getBroadcast(
                 context,
-                habitItem.hashCode(),
+                habitItem.id,
                 Intent(context, ScheduleReceiverForNotifyAboutHabits::class.java),
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
