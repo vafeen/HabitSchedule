@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import ru.vafeen.habitschedule.main.application.HabitApp
-import ru.vafeen.habitschedule.noui.db.DatabaseRepository
+import ru.vafeen.habitschedule.noui.db.HabitItemRepository
 import ru.vafeen.habitschedule.ui.common.components.bottom_bar.BottomBar
 import ru.vafeen.habitschedule.ui.screens.Screens
 
@@ -16,15 +16,8 @@ import ru.vafeen.habitschedule.ui.screens.Screens
 fun Main(
     navHostController: NavHostController,
 ) {
-    var db: DatabaseRepository? = null
-    val itemDao = HabitApp.hSDB?.habitItemDao()
-    val dtDao = HabitApp.hSDB?.habitDateTimeDao()
-    if (itemDao != null && dtDao != null) {
-        db = DatabaseRepository(
-            itemDao = itemDao,
-            dtDao = dtDao
-        )
-    }
+    val db = HabitApp.HabitItemRepository
+
     if (db != null) {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
