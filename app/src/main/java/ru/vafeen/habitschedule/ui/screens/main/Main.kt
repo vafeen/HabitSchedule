@@ -18,23 +18,20 @@ fun Main(
 ) {
     val db = HabitApp.HabitItemRepository
 
-    if (db != null) {
-        Scaffold(
-            modifier = Modifier.fillMaxSize(),
-            bottomBar = {
-                BottomBar(selected1 = true,
-                    onClickToScreen2 = {
-                        navHostController.navigate(Screens.Data.route)
-                    })
-            },
-        ) { innerPadding ->
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding)
-            ) {
-
-            }
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        bottomBar = {
+            BottomBar(selected1 = true,
+                onClickToScreen2 = {
+                    navHostController.navigate(Screens.Data.route)
+                })
+        },
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+        ) {
 
         }
 

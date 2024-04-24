@@ -56,143 +56,141 @@ fun Data(
 ) {
     val db = HabitApp.HabitItemRepository
 
-    if (db != null) {
-        val cor = rememberCoroutineScope()
+    val cor = rememberCoroutineScope()
 
-        var listik by remember {
-            mutableStateOf(listOf<HabitItem>())
+    var listik by remember {
+        mutableStateOf(listOf<HabitItem>())
+    }
+
+    val itemsList by remember {
+        mutableStateOf(flow {
+            emit(db.getAll())
+        })
+    }
+
+    LaunchedEffect(key1 = null) {
+        itemsList.collect {
+            listik = it
         }
 
-        val itemsList by remember {
-            mutableStateOf(flow {
-                emit(db.getAll())
+        logExecutor(suffixTag = LogType.Database.value, message = "обновление в launchedEffect")
+    }
+
+
+    var textSearch by remember {
+        mutableStateOf("")
+    }
+    var isAddingHabitDialogOpen by remember {
+        mutableStateOf(false)
+    }
+
+
+    Scaffold(modifier = Modifier.fillMaxSize(), topBar = {
+        TopAppBar(
+            title = {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(text = "Все напоминания", color = Color.Black)
+                }
+            }, colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = HabitScheduleTheme.colors.barsColor
+            )
+        )
+
+    }, bottomBar = {
+        BottomBar(selected2 = true,
+            onClickToScreen1 = {
+                navHostController.popBackStack()
+
+                navHostController.popBackStack()
+
+                navHostController.navigate(Screens.Main.route)
             })
+    }, floatingActionButton = {
+        FloatingActionButton(
+            onClick = { isAddingHabitDialogOpen = true },
+
+            containerColor = HabitScheduleTheme.colors.barsColor
+        ) {
+            Icon(imageVector = Icons.Default.Add, contentDescription = "Add habit")
         }
+    },
+        floatingActionButtonPosition = FabPosition.End
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .background(HabitScheduleTheme.colors.background)
+        ) {
+            OutlinedTextField(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(3.dp)
+                    .height(50.dp),
 
-        LaunchedEffect(key1 = null) {
-            itemsList.collect {
-                listik = it
-            }
+                textStyle = TextStyle(color = Color.Black),
 
-            logExecutor(suffixTag = LogType.Database.value, message = "обновление в launchedEffect")
-        }
+                value = textSearch,
 
+                onValueChange = {
+                    textSearch = it
+                },
 
-        var textSearch by remember {
-            mutableStateOf("")
-        }
-        var isAddingHabitDialogOpen by remember {
-            mutableStateOf(false)
-        }
+                leadingIcon = {
+                    Icon(imageVector = Icons.Default.Search, contentDescription = "search")
+                },
 
+                placeholder = { Text(text = "Искать в заметках") },
 
-        Scaffold(modifier = Modifier.fillMaxSize(), topBar = {
-            TopAppBar(
-                title = {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(text = "Все напоминания", color = Color.Black)
-                    }
-                }, colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = HabitScheduleTheme.colors.barsColor
+                colors = TextFieldDefaults.colors(
+                    focusedTextColor = Color.Black
                 )
             )
 
-        }, bottomBar = {
-            BottomBar(selected2 = true,
-                onClickToScreen1 = {
-                    navHostController.popBackStack()
+            if (isAddingHabitDialogOpen) {
+                AddingHabitDialog(
+                    onDismissRequest = { isAddingHabitDialogOpen = false },
 
-                    navHostController.popBackStack()
+                    onAddNewItem = { item ->
 
-                    navHostController.navigate(Screens.Main.route)
-                })
-        }, floatingActionButton = {
-            FloatingActionButton(
-                onClick = { isAddingHabitDialogOpen = true },
+                        cor.launch {
 
-                containerColor = HabitScheduleTheme.colors.barsColor
-            ) {
-                Icon(imageVector = Icons.Default.Add, contentDescription = "Add habit")
-            }
-        },
-            floatingActionButtonPosition = FabPosition.End
-        ) { innerPadding ->
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding)
-                    .background(HabitScheduleTheme.colors.background)
-            ) {
-                OutlinedTextField(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(3.dp)
-                        .height(50.dp),
+                            db.insert(item)
 
-                    textStyle = TextStyle(color = Color.Black),
+                            itemsList.collect { listik = it }
 
-                    value = textSearch,
-
-                    onValueChange = {
-                        textSearch = it
-                    },
-
-                    leadingIcon = {
-                        Icon(imageVector = Icons.Default.Search, contentDescription = "search")
-                    },
-
-                    placeholder = { Text(text = "Искать в заметках") },
-
-                    colors = TextFieldDefaults.colors(
-                        focusedTextColor = Color.Black
-                    )
-                )
-
-                if (isAddingHabitDialogOpen) {
-                    AddingHabitDialog(
-                        onDismissRequest = { isAddingHabitDialogOpen = false },
-
-                        onAddNewItem = { item ->
-
-                            cor.launch {
-
-                                db.insert(item)
-
-                                itemsList.collect { listik = it }
-
-                                logExecutor(
-                                    suffixTag = LogType.Database.value,
-                                    message = "обновление при вставке"
-                                )
-                            }
-
+                            logExecutor(
+                                suffixTag = LogType.Database.value,
+                                message = "обновление при вставке"
+                            )
                         }
-                    )
-                }
 
-                LazyColumn(
-                    modifier = Modifier.weight(1f)
-                ) {
-                    items(
-                        listik
-                            .let {
-                                if (textSearch.isEmpty()) {
-                                    it
-                                } else {
-                                    it.filter { hitem ->
-                                        hitem.title.contains(textSearch) || hitem.text.contains(
-                                            textSearch
-                                        )
-                                    }
+                    }
+                )
+            }
+
+            LazyColumn(
+                modifier = Modifier.weight(1f)
+            ) {
+                items(
+                    listik
+                        .let {
+                            if (textSearch.isEmpty()) {
+                                it
+                            } else {
+                                it.filter { hitem ->
+                                    hitem.title.contains(textSearch) || hitem.text.contains(
+                                        textSearch
+                                    )
                                 }
                             }
-                    ) { item ->
-                        item.CardOfHabit()
-                    }
+                        }
+                ) { item ->
+                    item.CardOfHabit()
                 }
             }
         }

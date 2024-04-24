@@ -12,10 +12,10 @@ import ru.vafeen.habitschedule.noui.notifications.NOTIFICATION_CHANNEL_NAME
 
 class HabitApp : Application() {
     companion object {
-        var hSDB: HabitScheduleDatabase? = null
+        lateinit var hSDB: HabitScheduleDatabase
             private set
 
-        var HabitItemRepository: HabitItemRepository? = null
+        lateinit var HabitItemRepository: HabitItemRepository
             private set
     }
 
