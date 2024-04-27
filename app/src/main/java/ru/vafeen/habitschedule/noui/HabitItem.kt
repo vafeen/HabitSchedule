@@ -16,6 +16,14 @@ data class HabitItem(
     val frequency: Frequency = Frequency.Once,
     val isWork: Boolean = true
 ) {
+    //    я добавлю в класс привычки
+//    2 поля:
+//    1 - очередность: неделя/месяц
+//    2 - строку которая будет парситься в массив чисел
+//    типо
+//    1 - неделя
+//    2 - 1,2,5
+//    т.е. срабатывает по вторникам, средам и субботам
     fun createHabitItemEntity(): HabitItemEntity = HabitItemEntity(
         id = id,
         title = title,

@@ -8,24 +8,20 @@ import ru.vafeen.habitschedule.noui.log.logExecutor
 
 class HabitItemRepository(
 ) {
-    private var itemDao = HabitApp.hSDB?.habitItemDao()
+    private var itemDao = HabitApp.hSDB.habitItemDao()
 
-    private var dtDao = HabitApp.hSDB?.habitDateTimeDao()
+    private var dtDao = HabitApp.hSDB.habitDateTimeDao()
 
     suspend fun getAll(): List<HabitItem> {
-        val items = itemDao?.getAll()
+        val items = itemDao.getAll()
 
-        if (items != null) {
-            logExecutor("MyLog", "items size = ${items.size}")
-        }
+        logExecutor("MyLog", "items size = ${items.size}")
 
-        val dateTimeList = dtDao?.getAll()
+        val dateTimeList = dtDao.getAll()
 
-        if (dateTimeList != null) {
-            logExecutor("MyLog", "dt list size = ${dateTimeList.size}")
-        }
+        logExecutor("MyLog", "dt list size = ${dateTimeList.size}")
 
-        return if (items != null && dateTimeList != null && (items.size == dateTimeList.size && items.isNotEmpty())) {
+        return if (items.size == dateTimeList.size && items.isNotEmpty()) {
 
             val result = mutableListOf<HabitItem>()
 
@@ -47,20 +43,20 @@ class HabitItemRepository(
 
 
     suspend fun insert(habitItem: HabitItem) {
-        itemDao?.insert(habitItem.createHabitItemEntity())
+        itemDao.insert(habitItem.createHabitItemEntity())
 
-        dtDao?.insert(habitItem.createHabitDateTimeEntity())
+        dtDao.insert(habitItem.createHabitDateTimeEntity())
     }
 
     suspend fun remove(habitItem: HabitItem) {
-        itemDao?.remove(habitItem.createHabitItemEntity())
+        itemDao.remove(habitItem.createHabitItemEntity())
 
-        dtDao?.remove(habitItem.createHabitDateTimeEntity())
+        dtDao.remove(habitItem.createHabitDateTimeEntity())
     }
 
     suspend fun update(habitItem: HabitItem) {
-        itemDao?.update(habitItem.createHabitItemEntity())
+        itemDao.update(habitItem.createHabitItemEntity())
 
-        dtDao?.update(habitItem.createHabitDateTimeEntity())
+        dtDao.update(habitItem.createHabitDateTimeEntity())
     }
 }

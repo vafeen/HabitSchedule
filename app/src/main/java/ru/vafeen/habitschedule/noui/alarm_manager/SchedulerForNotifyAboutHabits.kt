@@ -49,17 +49,13 @@ class SchedulerForNotifyAboutHabits(
             putExtra(ExtraValues.ItemID.key, habitItem.id)
         }
 
-
         alarmManager.setRepeating(
             AlarmManager.RTC_WAKEUP,
-            habitItem.dateTime.atZone(ZoneId.systemDefault())
-                .toEpochSecond() * 1000L,
-            habitItem.frequency.timeRepeat,
+            habitItem.dateTime.atZone(ZoneId.systemDefault()).toEpochSecond() * 1000L,
+            600000L,
+//            habitItem.frequency.timeRepeat,
             PendingIntent.getBroadcast(
-                context,
-                habitItem.id,
-                intent,
-                PendingIntent.FLAG_IMMUTABLE
+                context, habitItem.id, intent, PendingIntent.FLAG_IMMUTABLE
             )
         )
     }
