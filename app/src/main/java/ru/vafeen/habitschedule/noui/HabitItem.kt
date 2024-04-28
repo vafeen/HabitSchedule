@@ -1,6 +1,5 @@
 package ru.vafeen.habitschedule.noui
 
-import android.widget.Switch
 import com.google.gson.Gson
 import ru.vafeen.habitschedule.noui.dateAndTime.getMonth
 import ru.vafeen.habitschedule.noui.db.entities.HabitDateTimeEntity

@@ -41,6 +41,10 @@ class HabitItemRepository(
         }
     }
 
+    suspend fun getByIndex(index: Int): HabitItem = createHabitItem(
+        habitDT = dtDao.getByIndex(index = index),
+        habitItem = itemDao.getByIndex(index = index)
+    )
 
     suspend fun insert(habitItem: HabitItem) {
         itemDao.insert(habitItem.createHabitItemEntity())
@@ -59,4 +63,6 @@ class HabitItemRepository(
 
         dtDao.update(habitItem.createHabitDateTimeEntity())
     }
+
+
 }

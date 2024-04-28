@@ -13,6 +13,9 @@ interface HabitDateTimeDao {
     @Query("select * from habitdatetimeentity")
     suspend fun getAll(): List<HabitDateTimeEntity>
 
+    @Query("select * from habitdatetimeentity where id=:index")
+    suspend fun getByIndex(index: Int): HabitDateTimeEntity
+
     @Insert
     suspend fun insert(habitItemDateTime: HabitDateTimeEntity)
 

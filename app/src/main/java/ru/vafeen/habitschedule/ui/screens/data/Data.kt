@@ -37,15 +37,12 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.launch
 import ru.vafeen.habitschedule.main.application.HabitApp
 import ru.vafeen.habitschedule.noui.HabitItem
-import ru.vafeen.habitschedule.noui.db.HabitItemRepository
 import ru.vafeen.habitschedule.noui.log.LogType
 import ru.vafeen.habitschedule.noui.log.logExecutor
 import ru.vafeen.habitschedule.ui.common.components.bottom_bar.BottomBar
 import ru.vafeen.habitschedule.ui.common.components.card_of_habit.CardOfHabit
-import ru.vafeen.habitschedule.ui.common.components.dialogs.AddingHabitDialog
 import ru.vafeen.habitschedule.ui.screens.Screens
 import ru.vafeen.habitschedule.ui.theme.common.HabitScheduleTheme
 
@@ -111,7 +108,7 @@ fun Data(
             })
     }, floatingActionButton = {
         FloatingActionButton(
-            onClick = { isAddingHabitDialogOpen = true },
+            onClick = { navHostController.navigate(Screens.EditHabit.route) },
 
             containerColor = HabitScheduleTheme.colors.barsColor
         ) {
@@ -151,27 +148,27 @@ fun Data(
                 )
             )
 
-            if (isAddingHabitDialogOpen) {
-                AddingHabitDialog(
-                    onDismissRequest = { isAddingHabitDialogOpen = false },
-
-                    onAddNewItem = { item ->
-
-                        cor.launch {
-
-                            HabitApp.eventer.addEvent(habitItem = item)
-
-                            itemsList.collect { listik = it }
-
-                            logExecutor(
-                                suffixTag = LogType.Database.value,
-                                message = "обновление при вставке"
-                            )
-                        }
-
-                    }
-                )
-            }
+//            if (isAddingHabitDialogOpen) {
+//                AddingHabitDialog(
+//                    onDismissRequest = { isAddingHabitDialogOpen = false },
+//
+//                    onAddNewItem = { item ->
+//
+//                        cor.launch {
+//
+//                            HabitApp.eventer.addEvent(habitItem = item)
+//
+//                            itemsList.collect { listik = it }
+//
+//                            logExecutor(
+//                                suffixTag = LogType.Database.value,
+//                                message = "обновление при вставке"
+//                            )
+//                        }
+//
+//                    }
+//                )
+//            }
 
             LazyColumn(
                 modifier = Modifier.weight(1f)
@@ -190,7 +187,11 @@ fun Data(
                             }
                         }
                 ) { item ->
-                    item.CardOfHabit()
+                    item.CardOfHabit {
+                        HabitApp.indexOfEditableHabit = item.id
+
+                        navHostController.navigate(Screens.EditHabit.route)
+                    }
                 }
             }
         }

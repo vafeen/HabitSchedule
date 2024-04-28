@@ -13,6 +13,9 @@ interface HabitItemDao {
     @Query("select * from habititementity")
     suspend fun getAll(): List<HabitItemEntity>
 
+    @Query("select * from habititementity where id=:index")
+    suspend fun getByIndex(index: Int): HabitItemEntity
+
     @Insert
     suspend fun insert(habitItem: HabitItemEntity)
 
@@ -21,5 +24,4 @@ interface HabitItemDao {
 
     @Update
     suspend fun update(habitItem: HabitItemEntity)
-
 }

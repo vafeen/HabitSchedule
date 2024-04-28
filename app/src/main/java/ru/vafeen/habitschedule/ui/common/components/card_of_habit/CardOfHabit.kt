@@ -1,6 +1,5 @@
 package ru.vafeen.habitschedule.ui.common.components.card_of_habit
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
