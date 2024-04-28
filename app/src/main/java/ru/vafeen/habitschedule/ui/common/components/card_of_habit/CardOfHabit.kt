@@ -1,6 +1,7 @@
 package ru.vafeen.habitschedule.ui.common.components.card_of_habit
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -16,11 +17,14 @@ import ru.vafeen.habitschedule.noui.dateAndTime.getStringDateTime
 import ru.vafeen.habitschedule.ui.theme.common.HabitScheduleTheme
 
 @Composable
-fun HabitItem.CardOfHabit() {
+fun HabitItem.CardOfHabit(
+    onClick: () -> Unit
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(5.dp),
+            .padding(5.dp)
+            .clickable { onClick() },
         colors = CardDefaults.cardColors(
             containerColor = HabitScheduleTheme.colors.habitCardColor
         )
@@ -34,8 +38,11 @@ fun HabitItem.CardOfHabit() {
                 )
         ) {
             Text(text = title, color = Color.Black)
+
             Text(text = text)
+
             Text(text = dateTime.getStringDateTime())
+
             Text(text = frequencyData.frequency.ruName)
         }
 
