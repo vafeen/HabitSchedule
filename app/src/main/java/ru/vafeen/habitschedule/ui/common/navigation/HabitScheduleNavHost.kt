@@ -21,7 +21,9 @@ fun HabitScheduleNavHost() {
             Data(navHostController = navHostController)
         }
         composable(Screens.EditHabit.route) {
-            EditHabit()
+            EditHabit {
+                navHostController.popBackStack()
+            }
         }
     }
 

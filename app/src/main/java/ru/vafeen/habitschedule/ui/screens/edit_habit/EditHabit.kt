@@ -4,10 +4,14 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
@@ -16,10 +20,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.launch
 import ru.vafeen.habitschedule.main.application.HabitApp
 import ru.vafeen.habitschedule.noui.HabitItem
 import ru.vafeen.habitschedule.noui.dateAndTime.ListOfData.ruMonths
@@ -32,16 +38,10 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 
 @Composable
-fun EditHabit() {
-//    val mainButtonAction = onAddNewItem,
-    val mainButtonText = @Composable { item: HabitItem ->
-        val dt = item.dateTime
-        Text(
-            text = "Отправить ${dt.dayOfMonth} " +
-                    "${ruMonths[dt.monthValue - 1]} ${dt.year} в ${dt.getTimeString()}",
-            color = HabitScheduleTheme.colors.blackInLightAndLightGrayInDark
-        )
-    }
+fun EditHabit(
+    onClickToGoBack: () -> Unit
+) {
+    val cor = rememberCoroutineScope()
 
     val index = HabitApp.indexOfEditableHabit
 
@@ -88,9 +88,6 @@ fun EditHabit() {
             )
         }
     }
-
-
-
 
     Column(
         modifier = Modifier
@@ -141,37 +138,49 @@ fun EditHabit() {
 
         Spacer(modifier = Modifier.height(5.dp))
 
-//        Button(
-//            onClick = {
-//                val now = LocalDateTime.now()
-//
-//                val dt = LocalDateTime.of(
-//                    datePickerState.value,
-//                    timePickerState.value
-//                )
-//
-//                item = item.copy(
-//                    dateTime = if (now >= dt) {
-//                        dt.plusMinutes(2L)
-//                    } else {
-//                        dt
-//                    }
-//                )
-//
-////                mainButtonAction(item)
-////
-////                onDismissRequest()
-//
-//            }, shape = RoundedCornerShape(7.dp),
-//            modifier = Modifier
-//                .fillMaxWidth(0.8f)
-//                .align(Alignment.CenterHorizontally),
-//            colors = ButtonDefaults.buttonColors(
-//                containerColor = HabitScheduleTheme.colors.barsColor,
-//                contentColor = HabitScheduleTheme.colors.whiteInDarkAndBlackInLight
-//            )
-//        ) {
-////            mainButtonText(item = item)
-//        }
+        Button(
+            onClick = {
+                cor.launch {
+                    val now = LocalDateTime.now()
+
+                    val dt = LocalDateTime.of(
+                        datePickerState.value,
+                        timePickerState.value
+                    )
+
+                    item = item.copy(
+                        dateTime = if (now >= dt) {
+                            dt.plusMinutes(2L)
+                        } else {
+                            dt
+                        }
+                    )
+
+                    HabitApp.HabitItemRepository.insert(
+                        habitItem = item
+                    )
+                }
+
+                onClickToGoBack()
+
+            },
+            shape = RoundedCornerShape(7.dp),
+            modifier = Modifier
+                .fillMaxWidth(0.8f)
+                .align(Alignment.CenterHorizontally),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = HabitScheduleTheme.colors.barsColor,
+                contentColor = HabitScheduleTheme.colors.whiteInDarkAndBlackInLight
+            )
+        ) {
+            val dt = item.dateTime
+
+            Text(
+                text = "Отправить ${dt.dayOfMonth} " +
+                        "${ruMonths[dt.monthValue - 1]} ${dt.year} в ${dt.getTimeString()}",
+                color = HabitScheduleTheme.colors.blackInLightAndLightGrayInDark
+            )
+
+        }
     }
 }
