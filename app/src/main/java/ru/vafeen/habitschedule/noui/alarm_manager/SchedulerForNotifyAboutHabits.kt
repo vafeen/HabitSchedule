@@ -19,7 +19,7 @@ class SchedulerForNotifyAboutHabits(
     fun updateSchedule(habitItem: HabitItem) {
         cancel(habitItem)
 
-        if (habitItem.frequency == Frequency.Once) {
+        if (habitItem.frequencyData.frequency == Frequency.Once) {
             scheduleOnce(habitItem = habitItem)
         } else {
             scheduleWithRepeating(habitItem = habitItem)

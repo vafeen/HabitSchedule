@@ -36,7 +36,7 @@ fun HabitItem.CardOfHabit() {
             Text(text = title, color = Color.Black)
             Text(text = text)
             Text(text = dateTime.getStringDateTime())
-            Text(text = frequency.ruName)
+            Text(text = frequencyData.frequency.ruName)
         }
 
     }

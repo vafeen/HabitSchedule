@@ -14,7 +14,7 @@ class Eventer(
 
     private fun HabitItem.switch() {
         if (isWork) {
-            if (frequency == Frequency.Once) {
+            if (frequencyData.frequency == Frequency.Once) {
                 sheduler.scheduleOnce(habitItem = this)
             } else {
                 sheduler.scheduleWithRepeating(habitItem = this)

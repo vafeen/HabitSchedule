@@ -14,3 +14,8 @@ enum class Frequency(val index: Int, val ruName: String) {
         }
     }
 }
+
+data class FrequencyData(
+    val frequency: Frequency = Frequency.Once,
+    val listOfNumbers: List<Int>? = null,
+)

@@ -13,9 +13,8 @@ data class HabitItemEntity(
 
     val text: String,
 
-    val frequency: Int,
-){
-    override fun toString(): String {
-        return "${id}, ${title}, ${text}, ${frequency},"
-    }
+    val isWork: Boolean,
+
+    val frequencyData: String
+) {
 }

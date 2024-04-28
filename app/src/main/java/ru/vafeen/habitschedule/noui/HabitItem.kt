@@ -1,6 +1,7 @@
 package ru.vafeen.habitschedule.noui
 
 import android.widget.Switch
+import com.google.gson.Gson
 import ru.vafeen.habitschedule.noui.dateAndTime.getMonth
 import ru.vafeen.habitschedule.noui.db.entities.HabitDateTimeEntity
 import ru.vafeen.habitschedule.noui.db.entities.HabitItemEntity
@@ -10,11 +11,17 @@ import java.time.LocalTime
 
 data class HabitItem(
     val id: Int = 0,
+
     val title: String = "",
+
     val text: String = "",
+
     val dateTime: LocalDateTime = LocalDateTime.now(),
-    val frequency: Frequency = Frequency.Once,
-    val isWork: Boolean = true
+
+    val isWork: Boolean = true,
+
+    val frequencyData: FrequencyData = FrequencyData()
+
 ) {
     //    я добавлю в класс привычки
 //    2 поля:
@@ -27,7 +34,9 @@ data class HabitItem(
     fun createHabitItemEntity(): HabitItemEntity = HabitItemEntity(
         id = id,
         title = title,
-        text = text, frequency = frequency.index
+        text = text,
+        isWork = isWork,
+        frequencyData = Gson().toJson(frequencyData)
     )
 
     fun createHabitDateTimeEntity(): HabitDateTimeEntity = HabitDateTimeEntity(
@@ -55,5 +64,7 @@ fun createHabitItem(habitItem: HabitItemEntity, habitDT: HabitDateTimeEntity): H
                 habitDT.dateTimeDay
             ),
             LocalTime.of(habitDT.datetimeHours, habitDT.datetimeMinutes)
-        )
+        ),
+        isWork = habitItem.isWork,
+        frequencyData = Gson().fromJson(habitItem.frequencyData, FrequencyData::class.java)
     )
