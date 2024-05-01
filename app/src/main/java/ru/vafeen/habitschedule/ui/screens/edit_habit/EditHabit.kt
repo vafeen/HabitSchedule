@@ -1,18 +1,28 @@
 package ru.vafeen.habitschedule.ui.screens.edit_habit
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -24,6 +34,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import ru.vafeen.habitschedule.main.application.HabitApp
@@ -89,98 +100,129 @@ fun EditHabit(
         }
     }
 
-    Column(
-        modifier = Modifier
-            .size(500.dp)
-            .background(HabitScheduleTheme.colors.background)
-            .verticalScroll(rememberScrollState()),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceEvenly
-    ) {
-
-
-        OutlinedTextField(
-            value = item.title,
-            onValueChange = { item = item.copy(title = it) },
-            colors = tfColors,
-            label = { Text(text = "Название") },
-            singleLine = true
-        )
-
-        Spacer(modifier = Modifier.height(5.dp))
-
-        OutlinedTextField(value = item.text,
-            onValueChange = { item = item.copy(text = it) },
-            colors = tfColors,
-            label = { Text(text = "Описание") })
-
-        Spacer(modifier = Modifier.height(5.dp))
-
-        HSTimePicker(state = timePickerState) {
-            item = item.copy(
-                dateTime = LocalDateTime.of(
-                    datePickerState.value,
-                    timePickerState.value
+    Scaffold(
+        bottomBar = {
+            BottomAppBar(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(50.dp)
+                    .clickable(onClick = onClickToGoBack),
+                containerColor = HabitScheduleTheme.colors.barsColor
+            ) {
+                val colors = NavigationBarItemDefaults.colors(
+                    selectedIconColor = Color.Gray,
+                    unselectedIconColor = Color.Black,
+                    indicatorColor = HabitScheduleTheme.colors.barsColor
                 )
-            )
-        }
 
-        Spacer(modifier = Modifier.height(5.dp))
-
-        HSDatePicker(state = datePickerState) {
-            item = item.copy(
-                dateTime = LocalDateTime.of(
-                    datePickerState.value,
-                    timePickerState.value
+                NavigationBarItem(
+                    selected = false, onClick = onClickToGoBack, icon = {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                            contentDescription = "go back"
+                        )
+                    },
+                    colors = colors
                 )
-            )
+            }
         }
+    ) { paddingValues ->
+        Column(
+            modifier = Modifier
+                .size(500.dp)
+                .background(HabitScheduleTheme.colors.background)
+                .verticalScroll(rememberScrollState())
+                .padding(paddingValues),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.SpaceEvenly
+        ) {
 
-        Spacer(modifier = Modifier.height(5.dp))
 
-        Button(
-            onClick = {
-                cor.launch {
-                    val now = LocalDateTime.now()
+            OutlinedTextField(
+                value = item.title,
+                onValueChange = { item = item.copy(title = it) },
+                colors = tfColors,
+                label = { Text(text = "Название") },
+                singleLine = true
+            )
 
-                    val dt = LocalDateTime.of(
+            Spacer(modifier = Modifier.height(5.dp))
+
+            OutlinedTextField(value = item.text,
+                onValueChange = { item = item.copy(text = it) },
+                colors = tfColors,
+                label = { Text(text = "Описание") })
+
+            Spacer(modifier = Modifier.height(5.dp))
+
+            HSTimePicker(state = timePickerState) {
+                item = item.copy(
+                    dateTime = LocalDateTime.of(
                         datePickerState.value,
                         timePickerState.value
                     )
+                )
+            }
 
-                    item = item.copy(
-                        dateTime = if (now >= dt) {
-                            dt.plusMinutes(2L)
-                        } else {
-                            dt
-                        }
+            Spacer(modifier = Modifier.height(5.dp))
+
+            HSDatePicker(state = datePickerState) {
+                item = item.copy(
+                    dateTime = LocalDateTime.of(
+                        datePickerState.value,
+                        timePickerState.value
                     )
+                )
+            }
 
-                    HabitApp.HabitItemRepository.insert(
-                        habitItem = item
-                    )
-                }
+            Spacer(modifier = Modifier.height(5.dp))
 
-                onClickToGoBack()
+            Button(
+                onClick = {
+                    cor.launch {
+                        val now = LocalDateTime.now()
 
-            },
-            shape = RoundedCornerShape(7.dp),
-            modifier = Modifier
-                .fillMaxWidth(0.8f)
-                .align(Alignment.CenterHorizontally),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = HabitScheduleTheme.colors.barsColor,
-                contentColor = HabitScheduleTheme.colors.whiteInDarkAndBlackInLight
-            )
-        ) {
-            val dt = item.dateTime
+                        val dt = LocalDateTime.of(
+                            datePickerState.value,
+                            timePickerState.value
+                        )
 
-            Text(
-                text = "Отправить ${dt.dayOfMonth} " +
-                        "${ruMonths[dt.monthValue - 1]} ${dt.year} в ${dt.getTimeString()}",
-                color = HabitScheduleTheme.colors.blackInLightAndLightGrayInDark
-            )
+                        item = item.copy(
+                            dateTime = if (now >= dt) {
+                                dt.plusMinutes(2L)
+                            } else {
+                                dt
+                            }
+                        )
 
+                        HabitApp.HabitItemRepository.insert(
+                            habitItem = item
+                        )
+                    }
+
+                    onClickToGoBack()
+
+                },
+                shape = RoundedCornerShape(7.dp),
+                modifier = Modifier
+                    .fillMaxWidth(0.8f)
+                    .align(Alignment.CenterHorizontally),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = HabitScheduleTheme.colors.barsColor,
+                    contentColor = HabitScheduleTheme.colors.whiteInDarkAndBlackInLight
+                )
+            ) {
+                val dt = item.dateTime
+
+                Text(
+                    text = "Отправить ${dt.dayOfMonth} " +
+                            "${ruMonths[dt.monthValue - 1]} ${dt.year} в ${dt.getTimeString()}",
+                    color = HabitScheduleTheme.colors.blackInLightAndLightGrayInDark
+                )
+
+            }
         }
     }
+
+
 }
