@@ -73,14 +73,9 @@ fun Data(
         logExecutor(suffixTag = LogType.Database.value, message = "обновление в launchedEffect")
     }
 
-
     var textSearch by remember {
         mutableStateOf("")
     }
-    var isAddingHabitDialogOpen by remember {
-        mutableStateOf(false)
-    }
-
 
     Scaffold(modifier = Modifier.fillMaxSize(), topBar = {
         TopAppBar(
