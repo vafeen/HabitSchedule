@@ -5,16 +5,15 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -27,11 +26,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -41,6 +38,7 @@ import ru.vafeen.habitschedule.main.application.HabitApp
 import ru.vafeen.habitschedule.noui.HabitItem
 import ru.vafeen.habitschedule.noui.dateAndTime.ListOfData.ruMonths
 import ru.vafeen.habitschedule.ui.common.components.date_picker.HSDatePicker
+import ru.vafeen.habitschedule.ui.common.components.frequency_picker.FrequencyPicker
 import ru.vafeen.habitschedule.ui.common.components.time_input.HSTimePicker
 import ru.vafeen.habitschedule.ui.common.components.time_input.getTimeString
 import ru.vafeen.habitschedule.ui.theme.common.HabitScheduleTheme
@@ -63,7 +61,7 @@ fun EditHabit(
         focusedContainerColor = HabitScheduleTheme.colors.background,
     )
 
-    var item by remember {
+    val item = remember {
         mutableStateOf(HabitItem())
     }
 
@@ -77,15 +75,15 @@ fun EditHabit(
 
     if (index != null) {
         LaunchedEffect(key1 = null) {
-            item = HabitApp.HabitItemRepository.getByIndex(index)
+            item.value = HabitApp.HabitItemRepository.getByIndex(index)
         }
 
         datePickerState = remember {
             mutableStateOf(
                 LocalDate.of(
-                    item.dateTime.year,
-                    item.dateTime.month,
-                    item.dateTime.dayOfMonth
+                    item.value.dateTime.year,
+                    item.value.dateTime.month,
+                    item.value.dateTime.dayOfMonth
                 )
             )
         }
@@ -93,8 +91,8 @@ fun EditHabit(
         timePickerState = remember {
             mutableStateOf(
                 LocalTime.of(
-                    item.dateTime.hour,
-                    item.dateTime.minute
+                    item.value.dateTime.hour,
+                    item.value.dateTime.minute
                 )
             )
         }
@@ -129,7 +127,7 @@ fun EditHabit(
     ) { paddingValues ->
         Column(
             modifier = Modifier
-                .size(500.dp)
+                .fillMaxSize()
                 .background(HabitScheduleTheme.colors.background)
                 .verticalScroll(rememberScrollState())
                 .padding(paddingValues),
@@ -137,10 +135,9 @@ fun EditHabit(
             verticalArrangement = Arrangement.SpaceEvenly
         ) {
 
-
             OutlinedTextField(
-                value = item.title,
-                onValueChange = { item = item.copy(title = it) },
+                value = item.value.title,
+                onValueChange = { item.value = item.value.copy(title = it) },
                 colors = tfColors,
                 label = { Text(text = "Название") },
                 singleLine = true
@@ -148,15 +145,16 @@ fun EditHabit(
 
             Spacer(modifier = Modifier.height(5.dp))
 
-            OutlinedTextField(value = item.text,
-                onValueChange = { item = item.copy(text = it) },
+            OutlinedTextField(
+                value = item.value.text,
+                onValueChange = { item.value = item.value.copy(text = it) },
                 colors = tfColors,
                 label = { Text(text = "Описание") })
 
             Spacer(modifier = Modifier.height(5.dp))
 
             HSTimePicker(state = timePickerState) {
-                item = item.copy(
+                item.value = item.value.copy(
                     dateTime = LocalDateTime.of(
                         datePickerState.value,
                         timePickerState.value
@@ -167,13 +165,20 @@ fun EditHabit(
             Spacer(modifier = Modifier.height(5.dp))
 
             HSDatePicker(state = datePickerState) {
-                item = item.copy(
+                item.value = item.value.copy(
                     dateTime = LocalDateTime.of(
                         datePickerState.value,
                         timePickerState.value
                     )
                 )
             }
+
+            Spacer(modifier = Modifier.height(5.dp))
+
+            FrequencyPicker(
+                initialValue = item.value.frequencyData.frequency,
+                item = item
+            )
 
             Spacer(modifier = Modifier.height(5.dp))
 
@@ -187,7 +192,7 @@ fun EditHabit(
                             timePickerState.value
                         )
 
-                        item = item.copy(
+                        item.value = item.value.copy(
                             dateTime = if (now >= dt) {
                                 dt.plusMinutes(2L)
                             } else {
@@ -196,7 +201,7 @@ fun EditHabit(
                         )
 
                         HabitApp.HabitItemRepository.insert(
-                            habitItem = item
+                            habitItem = item.value
                         )
                     }
 
@@ -212,7 +217,7 @@ fun EditHabit(
                     contentColor = HabitScheduleTheme.colors.whiteInDarkAndBlackInLight
                 )
             ) {
-                val dt = item.dateTime
+                val dt = item.value.dateTime
 
                 Text(
                     text = "Отправить ${dt.dayOfMonth} " +
