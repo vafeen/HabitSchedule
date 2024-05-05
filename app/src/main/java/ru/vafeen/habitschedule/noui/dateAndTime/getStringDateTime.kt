@@ -4,5 +4,5 @@ import java.time.LocalDateTime
 
 
 fun LocalDateTime.getStringDateTime(): String {
-    return "${dayOfMonth}.${month.name}.${year} ${hour}:${minute}"
+    return "${dayOfMonth}.${getRuMonths()[month.value - 1]} $year ${hour}:${minute}"
 }
