@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import ru.vafeen.habitschedule.main.application.HabitApp
 import ru.vafeen.habitschedule.ui.screens.Screens
 import ru.vafeen.habitschedule.ui.screens.data.Data
 import ru.vafeen.habitschedule.ui.screens.edit_habit.HabitData
@@ -24,8 +23,6 @@ fun HabitScheduleNavHost() {
         composable(Screens.HabitData.route) {
             HabitData {
                 navHostController.popBackStack()
-
-                HabitApp.indexOfCurrentHabit = null
             }
         }
     }

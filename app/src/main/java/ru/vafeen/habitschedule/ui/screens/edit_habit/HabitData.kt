@@ -189,7 +189,9 @@ fun HabitData(
                             datePickerState.value,
                             timePickerState.value
                         )
+
                         Log.d("App", "1")
+
                         item.value = item.value.copy(
                             dateTime = if (now >= dt) {
                                 dt.plusMinutes(2L)
@@ -199,12 +201,23 @@ fun HabitData(
                         )
 
                         Log.d("App", "2")
-                        HabitApp.HabitItemRepository.update(
-                            habitItem = item.value
-                        )
+                        if (index != null) {
+                            HabitApp.HabitItemRepository.update(
+                                habitItem = item.value
+                            )
+
+                            HabitApp.indexOfCurrentHabit = null
+                        } else {
+                            HabitApp.HabitItemRepository.insert(
+                                habitItem = item.value
+                            )
+                        }
+
+
                     }
 
                     onClickToGoBack()
+
                     Log.d("App", "3")
 
                 },
