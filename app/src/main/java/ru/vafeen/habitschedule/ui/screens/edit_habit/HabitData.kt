@@ -36,12 +36,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import ru.vafeen.habitschedule.main.application.HabitApp
+import ru.vafeen.habitschedule.noui.DataObject.ruMonths
 import ru.vafeen.habitschedule.noui.HabitItem
-import ru.vafeen.habitschedule.noui.dateAndTime.ListOfData.ruMonths
+import ru.vafeen.habitschedule.noui.getTimeString
 import ru.vafeen.habitschedule.ui.common.components.date_picker.HSDatePicker
 import ru.vafeen.habitschedule.ui.common.components.frequency_picker.FrequencyPicker
 import ru.vafeen.habitschedule.ui.common.components.time_input.HSTimePicker
-import ru.vafeen.habitschedule.ui.common.components.time_input.getTimeString
 import ru.vafeen.habitschedule.ui.theme.common.HabitScheduleTheme
 import java.time.LocalDate
 import java.time.LocalDateTime

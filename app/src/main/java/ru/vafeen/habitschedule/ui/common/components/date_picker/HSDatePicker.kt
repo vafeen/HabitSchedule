@@ -16,8 +16,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import ru.vafeen.habitschedule.noui.dateAndTime.getRuDaysOfWeek
-import ru.vafeen.habitschedule.noui.dateAndTime.getRuMonths
+import ru.vafeen.habitschedule.noui.DataObject.ruDaysOfWeek
+import ru.vafeen.habitschedule.noui.DataObject.ruMonths
 import ru.vafeen.habitschedule.ui.theme.common.HabitScheduleTheme
 import ru.vafeen.habitschedule.ui.theme.common.TextSize
 import java.time.LocalDate
@@ -34,10 +34,6 @@ fun HSDatePicker(
     LaunchedEffect(key1 = null) {
         lazyListState.scrollToItem(index = today.dayOfYear - state.value.dayOfYear)
     }
-
-    val ruDaysOfWeek = getRuDaysOfWeek()
-
-    val ruMonths = getRuMonths()
 
     LazyColumn(
         state = lazyListState,

@@ -11,8 +11,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import ru.vafeen.habitschedule.noui.DataObject
+import ru.vafeen.habitschedule.noui.Frequency
 import ru.vafeen.habitschedule.noui.HabitItem
-import ru.vafeen.habitschedule.noui.dateAndTime.getStringDateTime
+import ru.vafeen.habitschedule.noui.getStringDateTime
+import ru.vafeen.habitschedule.noui.getTimeString
 import ru.vafeen.habitschedule.ui.theme.common.HabitScheduleTheme
 
 @Composable
@@ -36,13 +39,39 @@ fun HabitItem.CardOfHabit(
                     vertical = 7.dp
                 )
         ) {
+
+//            val title: String = "",
+//
+//            val text: String = "",
+//
+//            val dateTime: LocalDateTime = LocalDateTime.now(),
+//
+//            val isWork: Boolean = true,
+//
+//            val frequencyData: FrequencyData = FrequencyData()
+
             Text(text = title, color = Color.Black)
 
             Text(text = text)
 
-            Text(text = dateTime.getStringDateTime())
-
             Text(text = frequencyData.frequency.ruName)
+
+            if (frequencyData.frequency == Frequency.Once || frequencyData.frequency == Frequency.Daily) {
+
+                Text(
+                    text = if (frequencyData.frequency == Frequency.Once) {
+                        dateTime.getStringDateTime()
+                    } else {
+                        dateTime.getTimeString()
+                    }
+                )
+
+            } else if (frequencyData.frequency == Frequency.Weekly) {
+                Text(text = frequencyData.listOfNumbers?.map { number ->
+                    DataObject.ruDaysOfWeek[number]
+                }.toString())
+            }
+
         }
 
     }

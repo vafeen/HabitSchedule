@@ -22,10 +22,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import ru.vafeen.habitschedule.noui.DataObject.ruDaysOfWeek
 import ru.vafeen.habitschedule.noui.Frequency
 import ru.vafeen.habitschedule.noui.FrequencyData
 import ru.vafeen.habitschedule.noui.HabitItem
-import ru.vafeen.habitschedule.noui.dateAndTime.getRuDaysOfWeek
+
 import ru.vafeen.habitschedule.ui.common.components.days_picker.HSDaysPickerButton
 
 @Composable
@@ -36,7 +37,7 @@ fun FrequencyPicker(
         mutableStateOf(item.value.frequencyData.frequency)
     }
 
-    val daysOfWeek = getRuDaysOfWeek()
+    val daysOfWeek = ruDaysOfWeek
 
     var numbers by remember {
         mutableStateOf(listOf<Int>())
