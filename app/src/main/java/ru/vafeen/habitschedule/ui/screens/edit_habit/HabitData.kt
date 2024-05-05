@@ -48,7 +48,7 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 
 @Composable
-fun EditHabit(
+fun HabitData(
     onClickToGoBack: () -> Unit
 ) {
     val cor = rememberCoroutineScope()

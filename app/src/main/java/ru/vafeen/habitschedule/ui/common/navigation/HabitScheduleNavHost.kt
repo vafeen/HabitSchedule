@@ -6,7 +6,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import ru.vafeen.habitschedule.ui.screens.Screens
 import ru.vafeen.habitschedule.ui.screens.data.Data
-import ru.vafeen.habitschedule.ui.screens.edit_habit.EditHabit
+import ru.vafeen.habitschedule.ui.screens.edit_habit.HabitData
 import ru.vafeen.habitschedule.ui.screens.main.Main
 
 @Composable
@@ -20,8 +20,8 @@ fun HabitScheduleNavHost() {
         composable(Screens.Data.route) {
             Data(navHostController = navHostController)
         }
-        composable(Screens.EditHabit.route) {
-            EditHabit {
+        composable(Screens.HabitData.route) {
+            HabitData {
                 navHostController.popBackStack()
             }
         }

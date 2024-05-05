@@ -103,7 +103,7 @@ fun Data(
             })
     }, floatingActionButton = {
         FloatingActionButton(
-            onClick = { navHostController.navigate(Screens.EditHabit.route) },
+            onClick = { navHostController.navigate(Screens.HabitData.route) },
 
             containerColor = HabitScheduleTheme.colors.barsColor
         ) {
@@ -185,7 +185,7 @@ fun Data(
                     item.CardOfHabit {
                         HabitApp.indexOfEditableHabit = item.id
 
-                        navHostController.navigate(Screens.EditHabit.route)
+                        navHostController.navigate(Screens.HabitData.route)
                     }
                 }
             }
