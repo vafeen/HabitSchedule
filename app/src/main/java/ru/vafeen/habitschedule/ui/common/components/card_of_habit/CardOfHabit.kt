@@ -40,16 +40,6 @@ fun HabitItem.CardOfHabit(
                 )
         ) {
 
-//            val title: String = "",
-//
-//            val text: String = "",
-//
-//            val dateTime: LocalDateTime = LocalDateTime.now(),
-//
-//            val isWork: Boolean = true,
-//
-//            val frequencyData: FrequencyData = FrequencyData()
-
             Text(text = title, color = Color.Black)
 
             Text(text = text)
@@ -67,9 +57,13 @@ fun HabitItem.CardOfHabit(
                 )
 
             } else if (frequencyData.frequency == Frequency.Weekly) {
-                Text(text = frequencyData.listOfNumbers?.map { number ->
-                    DataObject.ruDaysOfWeek[number]
-                }.toString())
+
+                if (frequencyData.listOfNumbers != null) {
+                    Text(text = frequencyData.listOfNumbers.joinToString { number ->
+                        DataObject.ruDaysOfWeek[number]
+                    })
+                }
+
             }
 
         }
