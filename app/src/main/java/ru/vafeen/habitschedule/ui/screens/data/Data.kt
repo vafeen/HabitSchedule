@@ -118,52 +118,33 @@ fun Data(
                 .padding(innerPadding)
                 .background(HabitScheduleTheme.colors.background)
         ) {
-            OutlinedTextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(3.dp)
-                    .height(50.dp),
+            if (listik.isNotEmpty()) {
 
-                textStyle = TextStyle(color = Color.Black),
+                OutlinedTextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(3.dp)
+                        .height(50.dp),
 
-                value = textSearch,
+                    textStyle = TextStyle(color = Color.Black),
 
-                onValueChange = {
-                    textSearch = it
-                },
+                    value = textSearch,
 
-                leadingIcon = {
-                    Icon(imageVector = Icons.Default.Search, contentDescription = "search")
-                },
+                    onValueChange = {
+                        textSearch = it
+                    },
 
-                placeholder = { Text(text = "Искать в заметках") },
+                    leadingIcon = {
+                        Icon(imageVector = Icons.Default.Search, contentDescription = "search")
+                    },
 
-                colors = TextFieldDefaults.colors(
-                    focusedTextColor = Color.Black
+                    placeholder = { Text(text = "Искать в заметках") },
+
+                    colors = TextFieldDefaults.colors(
+                        focusedTextColor = Color.Black
+                    )
                 )
-            )
-
-//            if (isAddingHabitDialogOpen) {
-//                AddingHabitDialog(
-//                    onDismissRequest = { isAddingHabitDialogOpen = false },
-//
-//                    onAddNewItem = { item ->
-//
-//                        cor.launch {
-//
-//                            HabitApp.eventer.addEvent(habitItem = item)
-//
-//                            itemsList.collect { listik = it }
-//
-//                            logExecutor(
-//                                suffixTag = LogType.Database.value,
-//                                message = "обновление при вставке"
-//                            )
-//                        }
-//
-//                    }
-//                )
-//            }
+            }
 
             LazyColumn(
                 modifier = Modifier.weight(1f)
