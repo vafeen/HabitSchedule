@@ -30,11 +30,10 @@ import ru.vafeen.habitschedule.ui.common.components.days_picker.HSDaysPickerButt
 
 @Composable
 fun FrequencyPicker(
-    initialValue: Frequency,
     item: MutableState<HabitItem>
 ) {
     var frequency by remember {
-        mutableStateOf(initialValue)
+        mutableStateOf(item.value.frequencyData.frequency)
     }
 
     val daysOfWeek = getRuDaysOfWeek()
@@ -49,7 +48,8 @@ fun FrequencyPicker(
 
     val onDismissRequest = { isExpanded = false }
 
-    val freqList = Frequency.getListFrequency()
+    val freqList = Frequency.getListFrequency().subList(0, 3)
+
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -89,7 +89,7 @@ fun FrequencyPicker(
                 ) {
                     for (indexOfDay in 0..daysOfWeek.lastIndex) {
                         HSDaysPickerButton(
-                            day = "$indexOfDay",
+                            day = daysOfWeek[indexOfDay],
                             checked = indexOfDay in numbers
                         ) {
                             numbers = when (it) {
@@ -109,7 +109,12 @@ fun FrequencyPicker(
             }
 
             Frequency.Monthly -> {
-                LazyVerticalGrid(columns = GridCells.Fixed(7)) {
+
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(7),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
                     items(count = 31) { index ->
                         HSDaysPickerButton(
                             day = "$index",
@@ -117,11 +122,11 @@ fun FrequencyPicker(
                         ) {
                             numbers = when (it) {
                                 true -> {
-                                    numbers.minus(index)
+                                    numbers.plus(index)
                                 }
 
                                 false -> {
-                                    numbers.plus(index)
+                                    numbers.minus(index)
                                 }
                             }
 

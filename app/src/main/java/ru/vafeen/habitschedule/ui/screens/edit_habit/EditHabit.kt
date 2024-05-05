@@ -1,5 +1,6 @@
 package ru.vafeen.habitschedule.ui.screens.edit_habit
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -175,10 +176,7 @@ fun EditHabit(
 
             Spacer(modifier = Modifier.height(5.dp))
 
-            FrequencyPicker(
-                initialValue = item.value.frequencyData.frequency,
-                item = item
-            )
+            FrequencyPicker(item = item)
 
             Spacer(modifier = Modifier.height(5.dp))
 
@@ -191,7 +189,7 @@ fun EditHabit(
                             datePickerState.value,
                             timePickerState.value
                         )
-
+                        Log.d("App", "1")
                         item.value = item.value.copy(
                             dateTime = if (now >= dt) {
                                 dt.plusMinutes(2L)
@@ -200,12 +198,14 @@ fun EditHabit(
                             }
                         )
 
-                        HabitApp.HabitItemRepository.insert(
+                        Log.d("App", "2")
+                        HabitApp.HabitItemRepository.update(
                             habitItem = item.value
                         )
                     }
 
                     onClickToGoBack()
+                    Log.d("App", "3")
 
                 },
                 shape = RoundedCornerShape(7.dp),
