@@ -183,7 +183,7 @@ fun Data(
                         }
                 ) { item ->
                     item.CardOfHabit {
-                        HabitApp.indexOfEditableHabit = item.id
+                        HabitApp.indexOfCurrentHabit = item.id
 
                         navHostController.navigate(Screens.HabitData.route)
                     }

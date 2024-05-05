@@ -53,7 +53,7 @@ fun HabitData(
 ) {
     val cor = rememberCoroutineScope()
 
-    val index = HabitApp.indexOfEditableHabit
+    val index = HabitApp.indexOfCurrentHabit
 
     val tfColors = TextFieldDefaults.colors(
         focusedTextColor = HabitScheduleTheme.colors.blackInLightAndLightGrayInDark,

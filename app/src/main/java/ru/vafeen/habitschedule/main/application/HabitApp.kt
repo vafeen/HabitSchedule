@@ -22,7 +22,7 @@ class HabitApp : Application() {
         lateinit var eventer: Eventer
             private set
 
-        var indexOfEditableHabit: Int? = null
+        var indexOfCurrentHabit: Int? = null
     }
 
     override fun onCreate() {
