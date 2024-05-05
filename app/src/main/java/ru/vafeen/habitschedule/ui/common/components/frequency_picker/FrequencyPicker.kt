@@ -102,6 +102,13 @@ fun FrequencyPicker(
                                     numbers.minus(indexOfDay)
                                 }
                             }
+
+                            item.value = item.value.copy(
+                                frequencyData = item.value.frequencyData.copy(
+                                    listOfNumbers = numbers
+                                )
+                            )
+
                             Log.d("APPP", "$numbers")
 
                         }
@@ -130,6 +137,13 @@ fun FrequencyPicker(
                                     numbers.minus(index)
                                 }
                             }
+
+                            item.value = item.value.copy(
+                                frequencyData = item.value.frequencyData.copy(
+                                    listOfNumbers = numbers
+                                )
+                            )
+
 
                         }
                     }
